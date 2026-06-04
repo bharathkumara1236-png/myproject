@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>CyberShield SOC Scan Logs</title>
+
+    <style>
+        /* =========================
+GLOBAL
+========================= */
+
+        body {
+
+            font-family: "Segoe UI", Arial, sans-serif;
+
+            margin: 0;
+
+            background: linear-gradient(135deg, #0a0f1f, #0d1b2a);
+
+            color: #e0e0e0;
+
+            padding: 20px;
+        }
+
+
+        /* =========================
+HEADER
+========================= */
+
+        .header {
+
+            display: flex;
+
+            justify-content: space-between;
+
+            align-items: center;
+
+            background: #020617;
+
+            padding: 15px;
+
+            border-radius: 10px;
+
+            border: 1px solid #00ffcc33;
+
+            box-shadow: 0 0 15px #00ffcc22;
+        }
+
+        .header h2 {
+
+            margin: 0;
+
+            color: #00ffcc;
+        }
+
+        .nav a {
+
+            margin-left: 15px;
+
+            text-decoration: none;
+
+            padding: 8px 15px;
+
+            background: #00ffcc;
+
+            color: black;
+
+            border-radius: 5px;
+
+            font-weight: bold;
+
+            transition: 0.3s;
+        }
+
+        .nav a:hover {
+
+            background: #00ccaa;
+        }
+
+
+        /* =========================
+CONTAINER
+========================= */
+
+        .container {
+
+            margin-top: 20px;
+
+            background: #020617;
+
+            padding: 20px;
+
+            border-radius: 10px;
+
+            border: 1px solid #00ffcc33;
+
+            box-shadow: 0 0 10px #00ffcc22;
+        }
+
+
+        /* =========================
+TABLE
+========================= */
+
+        table {
+
+            width: 100%;
+
+            border-collapse: collapse;
+
+            margin-top: 15px;
+        }
+
+        th {
+
+            background: #001f33;
+
+            color: #00ffcc;
+
+            padding: 12px;
+
+            text-align: left;
+        }
+
+        td {
+
+            padding: 10px;
+
+            border-bottom: 1px solid #00ffcc22;
+        }
+
+
+        /* =========================
+ROW COLORS BASED ON SCAN TYPE
+========================= */
+
+        .port-scan {
+
+            border-left: 5px solid #00ccff;
+        }
+
+        .web-scan {
+
+            border-left: 5px solid #ffaa00;
+        }
+
+        .network-scan {
+
+            border-left: 5px solid #00ff00;
+        }
+
+        .file-scan {
+
+            border-left: 5px solid #ff3333;
+        }
+
+        .safeweb-scan {
+
+            border-left: 5px solid #00ffcc;
+        }
+
+
+        /* =========================
+EMPTY MESSAGE
+========================= */
+
+        .empty {
+
+            margin-top: 15px;
+
+            padding: 15px;
+
+            background: #0d1b2a;
+
+            border-radius: 5px;
+
+            text-align: center;
+
+            color: #888;
+        }
+
+
+        /* =========================
+FOOTER
+========================= */
+
+        .footer {
+
+            margin-top: 20px;
+
+            text-align: center;
+
+            color: #888;
+        }
+    </style>
+
+</head>
+
+
+
+<body>
+
+
+    <!-- =========================
+HEADER
+========================= -->
+
+    <div class="header">
+
+        <h2>CyberShield Scan History Logs</h2>
+
+        <div class="nav">
+
+            <a href="/dashboard">Dashboard</a>
+
+            <a href="/logout">Logout</a>
+
+        </div>
+
+    </div>
+
+
+
+    <!-- =========================
+LOG TABLE
+========================= -->
+
+    <div class="container">
+
+        {% if logs %}
+
+        <table>
+
+            <tr>
+                <th>Scan Type</th>
+                <th>Target</th>
+                <th>Result Summary</th>
+                <th>Scan Time</th>
+            </tr>
+
+
+            {% for log in logs %}
+
+            <tr class="
+{% if 'Port' in log[0] %}port-scan
+{% elif 'Web' in log[0] %}web-scan
+{% elif 'Network' in log[0] %}network-scan
+{% elif 'File' in log[0] %}file-scan
+{% elif 'SafeWeb' in log[0] %}safeweb-scan
+{% endif %}
+">
+
+                <td>{{ log[0] }}</td>
+                <td>{{ log[1] }}</td>
+                <td>{{ log[2] }}</td>
+                <td>{{ log[3] }}</td>
+
+            </tr>
+
+            {% endfor %}
+
+        </table>
+
+
+        {% else %}
+
+        <div class="empty">
+
+            No scan logs available.
+
+        </div>
+
+        {% endif %}
+
+    </div>
+
+
+
+    <!-- =========================
+FOOTER
+========================= -->
+
+    <div class="footer">
+
+        CyberShield Security Operations Center | Scan Monitoring System
+
+    </div>
+
+
+</body>
+
+</html>

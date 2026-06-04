@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CyberShield | Password Recovery</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Outfit:wght@300;400;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-neon: #00f2ff;
+            --secondary-neon: #0066ff;
+            --bg-dark: #050a15;
+            --card-bg: rgba(10, 20, 40, 0.7);
+            --text-main: #e0e6ed;
+            --glass-border: rgba(255, 255, 255, 0.1);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Outfit', sans-serif;
+            background-color: var(--bg-dark);
+            background-image: radial-gradient(circle at 50% 50%, rgba(0, 242, 255, 0.05) 0%, transparent 50%);
+            color: var(--text-main);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            overflow: hidden;
+        }
+
+        .login-wrapper {
+            width: 100%;
+            max-width: 420px;
+            padding: 20px;
+            animation: fadeIn 0.8s ease-out;
+        }
+
+        .login-card {
+            background: var(--card-bg);
+            backdrop-filter: blur(15px);
+            border: 1px solid var(--glass-border);
+            border-radius: 24px;
+            padding: 40px;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+        }
+
+        .brand { text-align: center; margin-bottom: 30px; }
+        .brand h1 {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 20px;
+            color: var(--primary-neon);
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .form-group { margin-bottom: 20px; }
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-size: 13px;
+            color: #8a99af;
+            text-transform: uppercase;
+        }
+
+        input, select {
+            width: 100%;
+            background: rgba(0, 0, 0, 0.2);
+            border: 1px solid var(--glass-border);
+            border-radius: 12px;
+            padding: 14px;
+            color: white;
+            font-family: inherit;
+        }
+
+        input:focus, select:focus {
+            outline: none;
+            border-color: var(--primary-neon);
+            box-shadow: 0 0 15px rgba(0, 242, 255, 0.2);
+        }
+
+        .login-btn {
+            width: 100%;
+            background: linear-gradient(135deg, var(--primary-neon), var(--secondary-neon));
+            border: none;
+            border-radius: 12px;
+            padding: 16px;
+            color: #050a15;
+            font-family: 'Orbitron', sans-serif;
+            font-weight: 700;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .login-btn:hover { transform: translateY(-2px); filter: brightness(1.1); }
+
+        .auth-links { margin-top: 25px; text-align: center; font-size: 14px; }
+        .auth-links a { color: var(--primary-neon); text-decoration: none; }
+
+        .flash {
+            background: rgba(0, 242, 255, 0.1);
+            border: 1px solid var(--primary-neon);
+            color: var(--primary-neon);
+            padding: 12px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            font-size: 14px;
+        }
+
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+    </style>
+</head>
+<body>
+    <div class="login-wrapper">
+        <div class="login-card">
+            <div class="brand">
+                <h1>Identity Recovery</h1>
+            </div>
+
+            {% with messages = get_flashed_messages() %}
+            {% if messages %}
+                {% for msg in messages %}
+                    <div class="flash">{{ msg }}</div>
+                {% endfor %}
+            {% endif %}
+            {% endwith %}
+
+            <form method="POST">
+                <div class="form-group">
+                    <label>Account Identifier (Username or Email)</label>
+                    <input type="text" name="identifier" placeholder="Enter username or registered email" required>
+                </div>
+                
+                <button type="submit" class="login-btn">Initialize Recovery</button>
+            </form>
+
+            <div class="auth-links">
+                <a href="/">Return to Surface Terminal</a>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

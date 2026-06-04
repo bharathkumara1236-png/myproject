@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CyberShield | Security Verification</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Outfit:wght@300;400;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-neon: #00f2ff;
+            --secondary-neon: #0066ff;
+            --bg-dark: #050a15;
+            --card-bg: rgba(10, 20, 40, 0.7);
+            --text-main: #e0e6ed;
+            --glass-border: rgba(255, 255, 255, 0.1);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Outfit', sans-serif;
+            background-color: var(--bg-dark);
+            background-image: radial-gradient(circle at 10% 10%, rgba(0, 242, 255, 0.05) 0%, transparent 50%);
+            color: var(--text-main);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            overflow: hidden;
+        }
+
+        .login-wrapper {
+            width: 100%;
+            max-width: 440px;
+            padding: 20px;
+        }
+
+        .login-card {
+            background: var(--card-bg);
+            backdrop-filter: blur(15px);
+            border: 1px solid var(--glass-border);
+            border-radius: 24px;
+            padding: 40px;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+        }
+
+        .brand h2 {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 20px;
+            color: var(--primary-neon);
+            text-align: center;
+            margin-bottom: 25px;
+            letter-spacing: 2px;
+        }
+
+        .form-group { margin-bottom: 15px; }
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-size: 12px;
+            color: #8a99af;
+            text-transform: uppercase;
+        }
+
+        input {
+            width: 100%;
+            background: rgba(0, 0, 0, 0.2);
+            border: 1px solid var(--glass-border);
+            border-radius: 12px;
+            padding: 12px;
+            color: white;
+            font-family: inherit;
+        }
+
+        input:focus {
+            outline: none;
+            border-color: var(--primary-neon);
+            box-shadow: 0 0 15px rgba(0, 242, 255, 0.2);
+        }
+
+        .otp-input {
+            text-align: center;
+            font-size: 24px !important;
+            letter-spacing: 8px;
+            font-family: 'Orbitron', sans-serif;
+            color: var(--primary-neon) !important;
+        }
+
+        .login-btn {
+            width: 100%;
+            background: linear-gradient(135deg, var(--primary-neon), var(--secondary-neon));
+            border: none;
+            border-radius: 12px;
+            padding: 16px;
+            color: #050a15;
+            font-family: 'Orbitron', sans-serif;
+            font-weight: 700;
+            cursor: pointer;
+            transition: 0.3s;
+            margin-top: 10px;
+        }
+
+        .login-btn:hover { transform: translateY(-2px); filter: brightness(1.1); }
+
+        .auth-links { margin-top: 20px; text-align: center; }
+        .auth-links a { color: #8a99af; text-decoration: none; font-size: 14px; }
+
+        .flash {
+            background: rgba(0, 242, 255, 0.1);
+            border: 1px solid var(--primary-neon);
+            color: var(--primary-neon);
+            padding: 12px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            font-size: 13px;
+        }
+    </style>
+</head>
+<body>
+    <div class="login-wrapper">
+        <div class="login-card">
+            <div class="brand">
+                <h2>Security Verification</h2>
+            </div>
+
+            {% with messages = get_flashed_messages() %}
+            {% if messages %}
+                {% for msg in messages %}
+                    <div class="flash">{{ msg }}</div>
+                {% endfor %}
+            {% endif %}
+            {% endwith %}
+
+            <form method="POST">
+                <p style="color: var(--primary-neon); font-size: 14px; margin-bottom: 20px; text-align: center; opacity: 0.8;">
+                    Verifying Identity: <strong>{{ identifier }}</strong>
+                </p>
+                
+                <div class="form-group">
+                    <label>6-Digit Security Token</label>
+                    <input type="text" name="otp" class="otp-input" placeholder="000000" required maxlength="6">
+                </div>
+                
+                <div class="form-group">
+                    <label>New Access Key</label>
+                    <input type="password" name="password" placeholder="••••••••" required>
+                </div>
+                
+                <div class="form-group">
+                    <label>Confirm Access Key</label>
+                    <input type="password" name="confirm" placeholder="••••••••" required>
+                </div>
+                
+                <button type="submit" class="login-btn">Authorize Reset</button>
+            </form>
+
+            <div class="auth-links">
+                <a href="/">Abort and Return to Login</a>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

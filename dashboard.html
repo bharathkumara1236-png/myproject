@@ -1,0 +1,530 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>CyberShield SOC Dashboard</title>
+
+    <style>
+        /* =========================
+GLOBAL
+========================= */
+
+        body {
+            font-family: "Segoe UI", Arial, sans-serif;
+            margin: 0;
+            background: linear-gradient(135deg, #0a0f1f, #0d1b2a);
+            color: #e0e0e0;
+            padding: 20px;
+        }
+
+
+        /* =========================
+HEADER
+========================= */
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: #020617;
+            padding: 15px 20px;
+            border-radius: 10px;
+            border: 1px solid #00ffcc33;
+            box-shadow: 0 0 15px #00ffcc22;
+        }
+
+        .header h2 {
+            color: #00ffcc;
+            margin: 0;
+        }
+
+        .nav {
+            display: flex;
+            align-items: center;
+        }
+
+        .nav a,
+        .nav button {
+
+            margin-left: 10px;
+            text-decoration: none;
+            padding: 8px 14px;
+            background: #00ffcc;
+            color: black;
+            border-radius: 5px;
+            font-weight: bold;
+            border: none;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .nav a:hover,
+        .nav button:hover {
+            background: #00ccaa;
+        }
+
+        /* =========================
+FLASH MESSAGE
+========================= */
+
+        .flash {
+            margin-top: 15px;
+            padding: 10px;
+            background: #002244;
+            border-left: 5px solid #00ccff;
+            border-radius: 5px;
+        }
+
+
+        /* =========================
+SECTION CARD
+========================= */
+
+        .section {
+            background: #020617;
+            margin-top: 20px;
+            padding: 20px;
+            border-radius: 10px;
+            border: 1px solid #00ffcc33;
+            box-shadow: 0 0 10px #00ffcc22;
+        }
+
+        .section h3 {
+            margin-top: 0;
+            color: #00ffcc;
+        }
+
+
+        /* =========================
+INPUTS
+========================= */
+
+        input {
+            padding: 10px;
+            width: 320px;
+            margin-top: 5px;
+            margin-bottom: 12px;
+            border-radius: 5px;
+            border: 1px solid #00ffcc55;
+            background: #0d1b2a;
+            color: white;
+        }
+
+        input:focus {
+            outline: none;
+            border-color: #00ffcc;
+            box-shadow: 0 0 6px #00ffcc;
+        }
+
+
+        /* =========================
+BUTTONS
+========================= */
+
+        button {
+            padding: 8px 16px;
+            border: none;
+            border-radius: 5px;
+            background: #00ffcc;
+            color: black;
+            font-weight: bold;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        button:hover {
+            background: #00ccaa;
+        }
+
+
+        /* =========================
+RESULT BOX
+========================= */
+
+        .result-box {
+            margin-top: 15px;
+            padding: 15px;
+            background: #0d1b2a;
+            border-radius: 5px;
+        }
+
+        .result-safe {
+            border-left: 5px solid #00ff00;
+        }
+
+        .result-warning {
+            border-left: 5px solid #ffaa00;
+        }
+
+        .result-danger {
+            border-left: 5px solid #ff3333;
+        }
+
+        /* =========================
+        STATUS BADGES
+        ========================= */
+        .status-badge {
+            display: inline-block;
+            padding: 8px 20px;
+            border-radius: 50px;
+            font-size: 1em;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 15px;
+            text-align: center;
+        }
+
+        .status-badge.safe {
+            background: #00ffcc;
+            color: #020617;
+            box-shadow: 0 0 15px #00ffcc;
+        }
+
+        .status-badge.caution {
+            background: #ffaa00;
+            color: #020617;
+            box-shadow: 0 0 15px #ffaa00;
+        }
+
+        .status-badge.danger {
+            background: #ff3333;
+            color: white;
+            box-shadow: 0 0 15px #ff3333;
+        }
+
+
+        /* =========================
+LIST
+========================= */
+
+        ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        li {
+            padding: 6px;
+            border-bottom: 1px solid #00ffcc22;
+        }
+
+
+        /* =========================
+ADMIN PANEL
+========================= */
+
+        .admin-panel {
+            margin-top: 10px;
+            padding: 10px;
+            background: #0d1b2a;
+            border-radius: 5px;
+        }
+
+
+        /* =========================
+RESPONSIVE
+========================= */
+
+        @media (max-width: 768px) {
+
+            input {
+                width: 100%;
+            }
+
+            .nav {
+                flex-direction: column;
+            }
+
+        }
+    </style>
+
+
+</head>
+
+
+<body>
+
+
+    <!-- HEADER -->
+
+    <div class="header">
+
+        <div style="display: flex; align-items: center;">
+            <img src="/static/logo.jpeg" width="40" style="margin-right:10px;">
+            <h2>CyberShield Security Operations Center</h2>
+        </div>
+
+        <div class="nav">
+
+            <a href="/scanlogs">Scan Logs</a>
+
+            <a href="/admin">Admin Dashboard</a>
+
+            <a href="/logout">Logout</a>
+
+        </div>
+
+    </div>
+
+
+    <!-- FLASH MESSAGES -->
+
+
+    {% with messages = get_flashed_messages() %}
+    {% if messages %}
+    {% for message in messages %}
+
+    <div class="flash">
+        {{ message }}
+    </div>
+
+    {% endfor %}
+    {% endif %}
+    {% endwith %}
+
+
+    <!-- PORT SCANNER -->
+
+    <div class="section">
+
+        <h3>Port Scanner</h3>
+
+        <form method="POST" action="/portscan">
+
+            <input type="text" name="target" placeholder="example.com or 192.168.1.1" required>
+
+            <br>
+
+            <button type="submit">Scan Ports</button>
+
+        </form>
+
+
+        {% if ports %}
+
+        <div class="result-box result-safe">
+
+            <h4>Open Ports: {{ target }}</h4>
+
+            <ul>
+
+                {% for port in ports %}
+                <li>Port {{ port }} OPEN</li>
+                {% endfor %}
+
+            </ul>
+
+        </div>
+
+        {% endif %}
+
+    </div>
+
+
+    <!-- WEB SCANNER -->
+
+    <div class="section">
+
+        <h3>Web Vulnerability Scanner</h3>
+
+        <form method="POST" action="/webscan">
+
+            <input type="text" name="url" placeholder="example.com" required>
+
+            <br>
+
+            <button type="submit">Scan Website</button>
+
+        </form>
+
+
+        {% if web_results %}
+
+        <div class="result-box result-warning">
+
+            <h4>Results: {{ scanned_url }}</h4>
+
+            <ul>
+
+                {% for result in web_results %}
+                <li>{{ result }}</li>
+                {% endfor %}
+
+            </ul>
+
+        </div>
+
+        {% endif %}
+
+    </div>
+
+
+    <!-- SAFEWEB ANALYZER -->
+
+    <div class="section">
+
+        <h3>SafeWeb Analyzer</h3>
+
+        <p><small>Detect phishing URLs and analyze website security posture.</small></p>
+
+        <form method="POST" action="/safeweb">
+
+            <input type="text" name="url" placeholder="Enter URL (e.g., example.com)" required>
+
+            <br>
+
+            <button type="submit">Scan / Search</button>
+
+        </form>
+
+
+        {% if safeweb_results %}
+
+        <div
+            class="result-box {% if 'CRITICAL' in safeweb_results|join(' ') or 'MALWARE' in safeweb_results|join(' ') or 'DANGER' in safeweb_results|join(' ') or 'BREACH' in safeweb_results|join(' ') %}result-danger{% elif 'Warning' in safeweb_results|join(' ') or 'Risk' in safeweb_results|join(' ') or 'SPAM' in safeweb_results|join(' ') %}result-warning{% else %}result-safe{% endif %}">
+
+            <div style="text-align: center; margin-bottom: 10px;">
+                <span
+                    class="status-badge {% if safeweb_status == 'SAFE TO USE' or safeweb_status == 'NO KNOWN THREATS' %}safe{% elif 'CAUTION' in safeweb_status %}caution{% else %}danger{% endif %}">
+                    {{ safeweb_status }}
+                </span>
+            </div>
+
+            <h4>Results: {{ analyzed_url }}</h4>
+
+            <ul>
+
+                {% for result in safeweb_results %}
+                <li style="margin-bottom: 5px;">
+                    {% if 'CRITICAL' in result or 'MALWARE' in result or 'BREACH' in result or 'DANGER' in result %}
+                    <span style="color: #ff3333; font-weight: bold;">[!] {{ result }}</span>
+                    {% elif 'Warning' in result or 'Risk' in result or 'SPAM' in result %}
+                    <span style="color: #ffaa00; font-weight: bold;">[?] {{ result }}</span>
+                    {% else %}
+                    <span style="color: #00ffcc;">{{ result }}</span>
+                    {% endif %}
+                </li>
+                {% endfor %}
+
+            </ul>
+
+        </div>
+
+        {% endif %}
+
+    </div>
+
+
+    <!-- FILE INTEGRITY -->
+
+    <div class="section">
+
+        <h3>File Integrity Monitor</h3>
+
+        <!-- Explanation Section -->
+        <div
+            style="background: rgba(0, 255, 204, 0.05); border: 1px solid rgba(0, 255, 204, 0.2); padding: 15px; border-radius: 10px; margin-bottom: 20px; font-size: 0.9em;">
+            <p style="margin: 0; color: #00ffcc; font-weight: bold;"><i class="fas fa-info-circle"></i> What is this?
+            </p>
+            <p style="margin: 5px 0 0 0; color: #8899aa;">
+                This tool uses <b>Cryptographic Hashing (SHA256)</b> to create a unique "Digital Secure Checksum" of
+                your
+                files.
+                If a file is secretly modified by malware or an intruder, its Secure Checksum will change, and this
+                monitor
+                will immediately detect the tampering.
+            </p>
+        </div>
+
+        <form method="POST" action="/savehash">
+            <label>1. Register / Update File Secure Checksum</label>
+            <input type="text" name="file_path" placeholder="e.g., C:\important\config.sys" required>
+            <button type="submit" style="background: #00ccff; color: #020617;">Save Hash</button>
+        </form>
+
+        <br>
+
+        <form method="POST" action="/filecheck">
+            <label>2. Verify File Integrity</label>
+            <input type="text" name="file_path" placeholder="e.g., C:\important\config.sys" required>
+            <button type="submit">Check Integrity</button>
+        </form>
+
+
+        {% if file_status %}
+
+        <div
+            class="result-box {% if file_status == 'SAFE' %}result-safe{% elif file_status == 'MODIFIED / TAMPERED' %}result-danger{% else %}result-warning{% endif %}">
+
+            <div style="margin-bottom: 12px;">
+                <span
+                    class="status-badge {% if file_status == 'SAFE' %}safe{% elif file_status == 'MODIFIED / TAMPERED' %}danger{% else %}caution{% endif %}"
+                    style="padding: 5px 15px; font-size: 0.9em; border-radius: 20px;">
+                    {% if file_status == 'SAFE' %}
+                    <i class="fas fa-check-circle"></i>
+                    {% elif file_status == 'MODIFIED / TAMPERED' %}
+                    <i class="fas fa-exclamation-triangle"></i>
+                    {% endif %}
+                    {{ file_status }}
+                </span>
+            </div>
+
+            <p style="margin: 5px 0;"><b>File:</b> {{ file_path }}</p>
+            <p style="margin: 5px 0; color: #e0e0e0;">{{ file_message }}</p>
+            <p
+                style="margin: 10px 0 0 0; font-size: 0.85em; color: #8899aa; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 5px;">
+                <i class="fas fa-clock"></i> Last Protected: {{ file_saved }}
+            </p>
+
+        </div>
+
+        {% endif %}
+
+    </div>
+
+
+    <!-- NETWORK SCANNER -->
+
+    <div class="section">
+
+        <h3>Network Scanner</h3>
+
+        <form method="POST" action="/networkscan">
+
+            <input type="text" name="base_ip" placeholder="192.168.1" required>
+
+            <br>
+
+            <button type="submit">Scan Network</button>
+
+        </form>
+
+
+        {% if network_hosts %}
+
+        <div class="result-box result-safe">
+
+            <h4>Active Hosts</h4>
+
+            <ul>
+
+                {% for host in network_hosts %}
+                <li>{{ host }}</li>
+                {% endfor %}
+
+            </ul>
+
+        </div>
+
+        {% endif %}
+
+    </div>
+
+
+</body>
+
+</html>

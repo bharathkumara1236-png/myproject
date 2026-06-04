@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>OTP Login - CyberShield</title>
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Roboto&display=swap" rel="stylesheet">
+<style>
+body { margin: 0; font-family: 'Roboto', sans-serif; background: radial-gradient(circle at top left, #0a0f1f, #0d1b2a); color: #e0e0e0; display: flex; justify-content: center; align-items: center; height: 100vh; overflow: hidden; }
+.login-container { background: rgba(2,6,23,0.85); backdrop-filter: blur(5px); padding: 40px 30px; border-radius: 15px; width: 360px; box-shadow: 0 0 30px #00ffcc55; position: relative; border: 1px solid #00ffcc33; }
+h2 { color: #00ffcc; font-family: 'Orbitron', sans-serif; text-transform: uppercase; font-size: 20px; text-align: center; }
+.flash { padding: 10px; margin-bottom: 15px; background: #002244; border-left: 5px solid #00ccff; border-radius: 5px; font-size: 13px; }
+label { display: block; margin-top: 15px; color: #00ffcc; font-size: 13px; }
+input, select { width: 100%; padding: 12px 14px; margin-top: 8px; border-radius: 25px; border: 1px solid #00ffcc55; background: rgba(13,27,42,0.7); color: white; box-sizing: border-box; }
+button { width: 100%; padding: 12px; margin-top: 25px; border: none; border-radius: 25px; background: linear-gradient(90deg, #00ffcc, #00ccff); color: black; font-weight: bold; cursor: pointer; transition: 0.3s; }
+button:hover { background: linear-gradient(90deg, #00ccff, #00ffcc); transform: scale(1.02); }
+.back { text-align: center; margin-top: 20px; }
+.back a { color: #00ffcc; text-decoration: none; font-size: 14px; }
+</style>
+</head>
+<body>
+<div class="login-container">
+    <h2>OTP Access</h2>
+    {% with messages = get_flashed_messages() %}
+    {% if messages %}
+        {% for msg in messages %}
+            <div class="flash">{{ msg }}</div>
+        {% endfor %}
+    {% endif %}
+    {% endwith %}
+    <form method="POST">
+        <label>Username / Email</label>
+        <input type="text" name="identifier" placeholder="Enter identifier" required>
+        
+        <button type="submit">Request Email OTP</button>
+    </form>
+    <div class="back">
+        <a href="/login">Back to password login</a>
+    </div>
+</div>
+</body>
+</html>

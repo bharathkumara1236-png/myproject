@@ -1,0 +1,470 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>CyberShield SOC Admin Dashboard</title>
+
+<style>
+
+/* =========================
+GLOBAL
+========================= */
+
+body {
+
+    font-family: "Segoe UI", Arial, sans-serif;
+
+    background: linear-gradient(135deg, #0a0f1f, #0d1b2a);
+
+    margin: 0;
+    padding: 20px;
+
+    color: #e0e0e0;
+}
+
+
+/* =========================
+HEADER
+========================= */
+
+.header {
+
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    padding: 15px;
+
+    background: #020617;
+
+    border-radius: 10px;
+
+    border: 1px solid #00ffcc33;
+
+    box-shadow: 0 0 15px #00ffcc22;
+}
+
+.header h2 {
+
+    color: #00ffcc;
+
+    margin: 0;
+}
+
+
+/* =========================
+CONTAINER BOX
+========================= */
+
+.box {
+
+    background: #020617;
+
+    padding: 20px;
+
+    margin-top: 20px;
+
+    border-radius: 10px;
+
+    border: 1px solid #00ffcc33;
+
+    box-shadow: 0 0 10px #00ffcc22;
+}
+
+.box h3 {
+
+    margin-top: 0;
+
+    color: #00ffcc;
+}
+
+
+/* =========================
+SUMMARY CARDS
+========================= */
+
+.summary {
+
+    display: flex;
+    flex-wrap: wrap;
+
+    gap: 20px;
+}
+
+.card {
+
+    flex: 1;
+
+    min-width: 220px;
+
+    padding: 15px;
+
+    border-radius: 8px;
+
+    background: #0d1b2a;
+
+    box-shadow: 0 0 10px #000;
+}
+
+
+/* Safe Card */
+
+.safe {
+
+    border-left: 6px solid #00ff00;
+}
+
+
+/* Attack Card */
+
+.attack-card {
+
+    border-left: 6px solid #ff3333;
+}
+
+
+/* =========================
+TABLE
+========================= */
+
+table {
+
+    width: 100%;
+
+    border-collapse: collapse;
+
+    margin-top: 15px;
+}
+
+th {
+
+    background: #001f33;
+
+    color: #00ffcc;
+
+    padding: 10px;
+
+    text-align: left;
+}
+
+td {
+
+    padding: 10px;
+
+    border-bottom: 1px solid #00ffcc22;
+}
+
+
+/* Success Row */
+
+.success-row {
+
+    background: #00220044;
+}
+
+
+/* Attack Row */
+
+.attack-row {
+
+    background: #22000044;
+}
+
+
+/* Status Labels */
+
+.status-safe {
+
+    color: #00ff00;
+
+    font-weight: bold;
+}
+
+.status-attack {
+
+    color: #ff3333;
+
+    font-weight: bold;
+}
+
+
+/* =========================
+BUTTONS
+========================= */
+
+.buttons {
+
+    margin-top: 20px;
+}
+
+.buttons a {
+
+    display: inline-block;
+
+    margin-right: 15px;
+
+    padding: 10px 15px;
+
+    text-decoration: none;
+
+    background: #00ffcc;
+
+    color: black;
+
+    border-radius: 5px;
+
+    font-weight: bold;
+
+    transition: 0.3s;
+}
+
+.buttons a:hover {
+
+    background: #00ccaa;
+}
+
+
+/* =========================
+RESPONSIVE
+========================= */
+
+@media (max-width: 768px) {
+
+    .summary {
+
+        flex-direction: column;
+    }
+
+}
+
+</style>
+
+</head>
+
+
+<body>
+
+
+<!-- =========================
+HEADER
+========================= -->
+
+<div class="header">
+
+<h2>CyberShield Security Operations Center (SOC)</h2>
+
+</div>
+
+
+
+<!-- =========================
+USER MANAGEMENT
+========================= -->
+
+<div class="box">
+
+<h3>Registered Users</h3>
+
+<table>
+<tr>
+<th>Username</th>
+<th>Status</th>
+<th>Actions</th>
+</tr>
+{% for user in users %}
+<tr class="{% if user[2] %}attack-row{% else %}success-row{% endif %}">
+<td>{{ user[1] }}</td>
+<td>{{ 'Blocked' if user[2] else 'Active' }}</td>
+<td>
+<form method="POST" action="/admin/user_action" style="display:inline;">
+<input type="hidden" name="username" value="{{ user[1] }}">
+<input type="hidden" name="action" value="toggle_block">
+<button type="submit">{% if user[2] %}Unblock{% else %}Block{% endif %}</button>
+</form>
+<form method="POST" action="/admin/user_action" style="display:inline; margin-left:5px;" onsubmit="return confirm('Remove user {{ user[1] }}?');">
+<input type="hidden" name="username" value="{{ user[1] }}">
+<input type="hidden" name="action" value="delete">
+<button type="submit">Remove</button>
+</form>
+</td>
+</tr>
+{% endfor %}
+</table>
+
+</div>
+
+<!-- =========================
+SYSTEM SUMMARY
+========================= -->
+
+<div class="box">
+
+<h3>System Summary</h3>
+
+<div class="summary">
+
+<div class="card safe">
+
+<b>Total Registered Users</b>
+<br><br>
+<span style="font-size:22px;">{{ total_users }}</span>
+
+</div>
+
+
+<div class="card safe">
+
+<b>Total Successful Logins</b>
+<br><br>
+<span style="font-size:22px;">{{ total_logins }}</span>
+
+</div>
+
+
+<div class="card attack-card">
+
+<b>Failed Login Attempts</b>
+<br><br>
+<span style="font-size:22px;">{{ failed_logs|length }}</span>
+
+</div>
+
+</div>
+
+</div>
+
+
+
+<!-- =========================
+SUCCESSFUL LOGINS
+========================= -->
+
+<div class="box">
+
+<h3>Successful Login Activity</h3>
+
+<form method="POST" action="/admin/clear_logs" style="margin-top:8px;">
+    <input type="hidden" name="log_type" value="success">
+    <button type="submit" onclick="return confirm('Clear ALL successful login history?')">Clear Successful Login History</button>
+</form>
+
+<table>
+
+<tr>
+
+<th>Status</th>
+<th>Username</th>
+<th>IP Address</th>
+<th>Login Time (IST)</th>
+
+</tr>
+
+
+{% for log in logs %}
+
+<tr class="success-row">
+
+<td class="status-safe">SAFE</td>
+
+<td>{{ log[1] }}</td>
+
+<td>{{ log[2] }}</td>
+
+<td>{{ log[3] }}</td>
+
+<td>
+    <form method="POST" action="/admin/delete_log" style="display:inline;">
+        <input type="hidden" name="log_type" value="success">
+        <input type="hidden" name="id" value="{{ log[0] }}">
+        <button type="submit" onclick="return confirm('Remove this successful login entry?')">Delete</button>
+    </form>
+</td>
+
+</tr>
+
+{% endfor %}
+
+
+</table>
+
+</div>
+
+
+
+<!-- =========================
+FAILED LOGIN ATTEMPTS
+========================= -->
+
+<div class="box">
+
+<h3>Failed Login Attempts (Attack Detection)</h3>
+
+<form method="POST" action="/admin/clear_logs" style="margin-top:8px;">
+    <input type="hidden" name="log_type" value="failed">
+    <button type="submit" onclick="return confirm('Clear ALL failed login attempts history?')">Clear Failed Attempts History</button>
+</form>
+
+<table>
+
+<tr>
+
+<th>Status</th>
+<th>Username</th>
+<th>Attacker IP</th>
+<th>Attack Time</th>
+
+</tr>
+
+
+{% for log in failed_logs %}
+
+<tr class="attack-row">
+
+<td class="status-attack">ATTACK</td>
+
+<td>{{ log[1] }}</td>
+
+<td>{{ log[2] }}</td>
+
+<td>{{ log[3] }}</td>
+
+<td>
+    <form method="POST" action="/admin/delete_log" style="display:inline;">
+        <input type="hidden" name="log_type" value="failed">
+        <input type="hidden" name="id" value="{{ log[0] }}">
+        <button type="submit" onclick="return confirm('Remove this failed login entry?')">Delete</button>
+    </form>
+</td>
+
+</tr>
+
+{% endfor %}
+
+
+</table>
+
+</div>
+
+
+
+<!-- =========================
+NAVIGATION BUTTONS
+========================= -->
+
+<div class="buttons">
+
+<a href="/dashboard">Back to Dashboard</a>
+
+<a href="/logout">Logout</a>
+
+</div>
+
+
+
+</body>
+
+</html>

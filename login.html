@@ -1,0 +1,388 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CyberShield | SOC Secure Access</title>
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;700;900&family=Outfit:wght@300;400;600&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --primary-neon: #00f2ff;
+            --secondary-neon: #0066ff;
+            --accent-neon: #7000ff;
+            --bg-dark: #050a15;
+            --card-bg: rgba(10, 20, 40, 0.7);
+            --text-main: #e0e6ed;
+            --glass-border: rgba(255, 255, 255, 0.1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Outfit', sans-serif;
+            background-color: var(--bg-dark);
+            background-image: 
+                radial-gradient(circle at 20% 30%, rgba(0, 242, 255, 0.05) 0%, transparent 40%),
+                radial-gradient(circle at 80% 70%, rgba(112, 0, 255, 0.05) 0%, transparent 40%);
+            color: var(--text-main);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            overflow: hidden;
+            position: relative;
+        }
+
+        /* Animated Grid Background */
+        body::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                linear-gradient(rgba(0, 242, 255, 0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(0, 242, 255, 0.03) 1px, transparent 1px);
+            background-size: 50px 50px;
+            z-index: -1;
+            perspective: 1000px;
+            transform: rotateX(45deg);
+            transform-origin: top;
+            animation: grid-move 20s linear infinite;
+        }
+
+        @keyframes grid-move {
+            0% { background-position: 0 0; }
+            100% { background-position: 0 500px; }
+        }
+
+        /* Glow Particles */
+        .particles {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+        }
+
+        .particle {
+            position: absolute;
+            background: var(--primary-neon);
+            border-radius: 50%;
+            opacity: 0.3;
+            filter: blur(2px);
+            animation: float-particle var(--duration) ease-in-out infinite;
+        }
+
+        @keyframes float-particle {
+            0%, 100% { transform: translateY(0) translateX(0); opacity: 0.3; }
+            50% { transform: translateY(-100px) translateX(20px); opacity: 0.6; }
+        }
+
+        /* Glassmorphism Container */
+        .login-wrapper {
+            position: relative;
+            z-index: 10;
+            width: 100%;
+            max-width: 420px;
+            padding: 20px;
+            animation: fadeInUp 0.8s cubic-bezier(0.165, 0.84, 0.44, 1);
+        }
+
+        .login-card {
+            background: var(--card-bg);
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
+            border: 1px solid var(--glass-border);
+            border-radius: 24px;
+            padding: 40px;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .login-card::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.05), transparent);
+            transition: 0.5s;
+        }
+
+        .login-card:hover::before {
+            left: 100%;
+            transition: 0.7s;
+        }
+
+        /* Branding */
+        .brand {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .brand img {
+            width: 70px;
+            height: 70px;
+            border-radius: 15px;
+            margin-bottom: 15px;
+            box-shadow: 0 0 20px rgba(0, 242, 255, 0.3);
+            border: 2px solid var(--primary-neon);
+        }
+
+        .brand h1 {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 22px;
+            font-weight: 700;
+            letter-spacing: 2px;
+            color: var(--primary-neon);
+            text-transform: uppercase;
+            text-shadow: 0 0 10px rgba(0, 242, 255, 0.5);
+        }
+
+        .brand p {
+            font-size: 14px;
+            color: #8a99af;
+            margin-top: 5px;
+        }
+
+        /* Form Elements */
+        .form-group {
+            margin-bottom: 20px;
+            position: relative;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-size: 13px;
+            font-weight: 600;
+            color: #8a99af;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            padding-left: 5px;
+        }
+
+        .input-container {
+            position: relative;
+        }
+
+        input {
+            width: 100%;
+            background: rgba(0, 0, 0, 0.2);
+            border: 1px solid var(--glass-border);
+            border-radius: 12px;
+            padding: 14px 16px;
+            color: white;
+            font-family: inherit;
+            font-size: 15px;
+            transition: all 0.3s ease;
+        }
+
+        input:focus {
+            outline: none;
+            border-color: var(--primary-neon);
+            background: rgba(0, 0, 0, 0.4);
+            box-shadow: 0 0 15px rgba(0, 242, 255, 0.15);
+        }
+
+        /* Action Button */
+        .login-btn {
+            width: 100%;
+            background: linear-gradient(135deg, var(--primary-neon), var(--secondary-neon));
+            border: none;
+            border-radius: 12px;
+            padding: 16px;
+            color: #050a15;
+            font-family: 'Orbitron', sans-serif;
+            font-weight: 700;
+            font-size: 16px;
+            letter-spacing: 1px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 10px;
+            box-shadow: 0 10px 20px -10px rgba(0, 242, 255, 0.5);
+        }
+
+        .login-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 15px 25px -10px rgba(0, 242, 255, 0.6);
+            filter: brightness(1.1);
+        }
+
+        .login-btn:active {
+            transform: translateY(0);
+        }
+
+        .login-btn:disabled {
+            opacity: 0.7;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        /* Links */
+        .auth-links {
+            margin-top: 25px;
+            text-align: center;
+            font-size: 14px;
+            color: #8a99af;
+        }
+
+        .auth-links a {
+            color: var(--primary-neon);
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.2s;
+        }
+
+        .auth-links a:hover {
+            text-shadow: 0 0 10px var(--primary-neon);
+            text-decoration: underline;
+        }
+
+        /* Flash Messages */
+        .flash-container {
+            margin-bottom: 20px;
+        }
+
+        .flash {
+            background: rgba(255, 77, 77, 0.1);
+            border: 1px solid rgba(255, 77, 77, 0.3);
+            color: #ff4d4d;
+            padding: 12px 16px;
+            border-radius: 10px;
+            font-size: 14px;
+            margin-bottom: 10px;
+            animation: shake 0.5s cubic-bezier(.36,.07,.19,.97) both;
+        }
+
+        @keyframes shake {
+            10%, 90% { transform: translate3d(-1px, 0, 0); }
+            20%, 80% { transform: translate3d(2px, 0, 0); }
+            30%, 50%, 70% { transform: translate3d(-4px, 0, 0); }
+            40%, 60% { transform: translate3d(4px, 0, 0); }
+        }
+
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Footer */
+        .login-footer {
+            text-align: center;
+            margin-top: 30px;
+            font-size: 11px;
+            color: rgba(138, 153, 175, 0.4);
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        /* Responsive */
+        @media (max-width: 480px) {
+            .login-card {
+                padding: 30px 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    
+    <div class="particles" id="particles"></div>
+
+    <div class="login-wrapper">
+        <div class="login-card">
+            <div class="brand">
+                <img src="/static/logo.jpeg" alt="CyberShield Logo">
+                <h1>CyberShield</h1>
+                <p>Security Operations Center Access</p>
+            </div>
+
+            <div class="flash-container">
+                {% with messages = get_flashed_messages() %}
+                    {% if messages %}
+                        {% for msg in messages %}
+                            <div class="flash">{{ msg }}</div>
+                        {% endfor %}
+                    {% endif %}
+                {% endwith %}
+            </div>
+
+            <form method="POST" id="loginForm">
+                <div class="form-group">
+                    <label for="username">Identity</label>
+                    <div class="input-container">
+                        <input type="text" id="username" name="username" placeholder="Username / Email" required autofocus>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="password">Access Key</label>
+                    <div class="input-container">
+                        <input type="password" id="password" name="password" placeholder="••••••••" required>
+                    </div>
+                </div>
+
+                <button type="submit" class="login-btn" id="loginBtn">Initialize Session</button>
+            </form>
+
+            <div class="auth-links">
+                New Operative? <a href="/register">Register</a>
+                <span style="margin: 0 10px; opacity: 0.3;">|</span>
+                <a href="/login/otp">Login with OTP</a>
+                <span style="margin: 0 10px; opacity: 0.3;">|</span>
+                <a href="/reset">Forgot Access Key?</a>
+            </div>
+        </div>
+        
+        <div class="login-footer">
+            &copy; 2026 CyberShield Unified Security Protocol
+        </div>
+    </div>
+
+    <script>
+        // Particle generation
+        const container = document.getElementById('particles');
+        const particleCount = 20;
+
+        for (let i = 0; i < particleCount; i++) {
+            const particle = document.createElement('div');
+            particle.className = 'particle';
+            
+            const size = Math.random() * 5 + 2;
+            particle.style.width = `${size}px`;
+            particle.style.height = `${size}px`;
+            
+            particle.style.left = `${Math.random() * 100}%`;
+            particle.style.top = `${Math.random() * 100}%`;
+            
+            const duration = Math.random() * 10 + 5;
+            particle.style.setProperty('--duration', `${duration}s`);
+            particle.style.animationDelay = `${Math.random() * 5}s`;
+            
+            container.appendChild(particle);
+        }
+
+        // Form Submission Logic
+        const loginForm = document.getElementById('loginForm');
+        const loginBtn = document.getElementById('loginBtn');
+
+        loginForm.addEventListener('submit', (e) => {
+            loginBtn.disabled = true;
+            loginBtn.innerHTML = '<span style="opacity: 0.5;">Authenticating...</span>';
+            // Form continues submission naturally
+        });
+    </script>
+</body>
+</html>

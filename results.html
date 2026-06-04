@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>CyberShield Scan Results</title>
+
+<style>
+
+/* =========================
+GLOBAL
+========================= */
+
+body {
+
+    font-family: "Segoe UI", Arial, sans-serif;
+
+    margin: 0;
+
+    background: linear-gradient(135deg, #0a0f1f, #0d1b2a);
+
+    color: #e0e0e0;
+
+    padding: 20px;
+}
+
+
+/* =========================
+HEADER
+========================= */
+
+.header {
+
+    background: #020617;
+
+    padding: 15px;
+
+    border-radius: 10px;
+
+    border: 1px solid #00ffcc33;
+
+    box-shadow: 0 0 15px #00ffcc22;
+
+    display: flex;
+
+    justify-content: space-between;
+
+    align-items: center;
+}
+
+.header h2 {
+
+    margin: 0;
+
+    color: #00ffcc;
+}
+
+.nav a {
+
+    margin-left: 15px;
+
+    text-decoration: none;
+
+    padding: 8px 15px;
+
+    background: #00ffcc;
+
+    color: black;
+
+    border-radius: 5px;
+
+    font-weight: bold;
+}
+
+.nav a:hover {
+
+    background: #00ccaa;
+}
+
+
+/* =========================
+RESULT CONTAINER
+========================= */
+
+.container {
+
+    margin-top: 20px;
+
+    background: #020617;
+
+    padding: 20px;
+
+    border-radius: 10px;
+
+    border: 1px solid #00ffcc33;
+
+    box-shadow: 0 0 10px #00ffcc22;
+}
+
+
+/* =========================
+TARGET INFO
+========================= */
+
+.info {
+
+    margin-bottom: 15px;
+
+    padding: 10px;
+
+    background: #0d1b2a;
+
+    border-radius: 5px;
+}
+
+
+/* =========================
+RISK LEVEL
+========================= */
+
+.risk {
+
+    padding: 10px;
+
+    border-radius: 5px;
+
+    font-weight: bold;
+
+    margin-top: 10px;
+}
+
+.risk-low {
+
+    background: #002200;
+
+    color: #00ff00;
+}
+
+.risk-medium {
+
+    background: #332200;
+
+    color: #ffaa00;
+}
+
+.risk-high {
+
+    background: #330000;
+
+    color: #ff3333;
+}
+
+
+/* =========================
+RESULT LIST
+========================= */
+
+ul {
+
+    list-style: none;
+
+    padding: 0;
+}
+
+li {
+
+    padding: 8px;
+
+    border-bottom: 1px solid #00ffcc22;
+}
+
+
+/* =========================
+STATUS COLORS
+========================= */
+
+.safe {
+
+    color: #00ff00;
+}
+
+.warning {
+
+    color: #ffaa00;
+}
+
+.danger {
+
+    color: #ff3333;
+}
+
+
+/* =========================
+FOOTER
+========================= */
+
+.footer {
+
+    margin-top: 20px;
+
+    text-align: center;
+
+    color: #888;
+}
+
+</style>
+
+</head>
+
+
+
+<body>
+
+
+<!-- =========================
+HEADER
+========================= -->
+
+<div class="header">
+
+<h2>CyberShield Scan Results</h2>
+
+<div class="nav">
+
+<a href="/dashboard">Dashboard</a>
+
+<a href="/scanlogs">Scan Logs</a>
+
+<a href="/logout">Logout</a>
+
+</div>
+
+</div>
+
+
+
+<!-- =========================
+RESULT CONTAINER
+========================= -->
+
+<div class="container">
+
+
+<div class="info">
+
+<b>Target:</b> {{ target }} <br>
+
+<b>Scan Time:</b> {{ scan_time }} <br>
+
+<b>Scanner:</b> CyberShield Vulnerability Engine
+
+</div>
+
+
+
+<!-- =========================
+RISK LEVEL
+========================= -->
+
+{% if risk_level == "LOW" %}
+
+<div class="risk risk-low">
+Risk Level: LOW (System Secure)
+</div>
+
+{% elif risk_level == "MEDIUM" %}
+
+<div class="risk risk-medium">
+Risk Level: MEDIUM (Some vulnerabilities found)
+</div>
+
+{% elif risk_level == "HIGH" %}
+
+<div class="risk risk-high">
+Risk Level: HIGH (Critical vulnerabilities detected)
+</div>
+
+{% endif %}
+
+
+
+<!-- =========================
+RESULT LIST
+========================= -->
+
+<h3>Scan Findings</h3>
+
+<ul>
+
+{% for result in results %}
+
+{% if "SAFE" in result or "Secure" in result %}
+
+<li class="safe">{{ result }}</li>
+
+{% elif "Missing" in result or "Warning" in result %}
+
+<li class="warning">{{ result }}</li>
+
+{% elif "vulnerability" in result or "MODIFIED" in result %}
+
+<li class="danger">{{ result }}</li>
+
+{% else %}
+
+<li>{{ result }}</li>
+
+{% endif %}
+
+{% endfor %}
+
+</ul>
+
+
+</div>
+
+
+
+<!-- =========================
+FOOTER
+========================= -->
+
+<div class="footer">
+
+CyberShield Security Operations Center | Vulnerability Assessment Report
+
+</div>
+
+
+
+</body>
+
+</html>

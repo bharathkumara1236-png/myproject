@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CyberShield | Operative Registration</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Outfit:wght@300;400;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-neon: #00f2ff;
+            --secondary-neon: #0066ff;
+            --bg-dark: #050a15;
+            --card-bg: rgba(10, 20, 40, 0.7);
+            --text-main: #e0e6ed;
+            --glass-border: rgba(255, 255, 255, 0.1);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Outfit', sans-serif;
+            background-color: var(--bg-dark);
+            background-image: 
+                radial-gradient(circle at 10% 10%, rgba(0, 242, 255, 0.05) 0%, transparent 50%),
+                radial-gradient(circle at 90% 90%, rgba(112, 0, 255, 0.05) 0%, transparent 50%);
+            color: var(--text-main);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            overflow: hidden;
+        }
+
+        .login-wrapper {
+            width: 100%;
+            max-width: 440px;
+            padding: 20px;
+            animation: fadeIn 0.8s ease-out;
+        }
+
+        .login-card {
+            background: var(--card-bg);
+            backdrop-filter: blur(15px);
+            border: 1px solid var(--glass-border);
+            border-radius: 24px;
+            padding: 35px;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+        }
+
+        .brand { text-align: center; margin-bottom: 25px; }
+        .brand h1 {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 20px;
+            color: var(--primary-neon);
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+
+        .form-group { margin-bottom: 15px; }
+        .form-group.full { grid-column: span 2; }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-size: 11px;
+            color: #8a99af;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        input {
+            width: 100%;
+            background: rgba(0, 0, 0, 0.2);
+            border: 1px solid var(--glass-border);
+            border-radius: 10px;
+            padding: 12px;
+            color: white;
+            font-family: inherit;
+            font-size: 14px;
+        }
+
+        input:focus {
+            outline: none;
+            border-color: var(--primary-neon);
+            box-shadow: 0 0 10px rgba(0, 242, 255, 0.15);
+        }
+
+        .login-btn {
+            width: 100%;
+            background: linear-gradient(135deg, var(--primary-neon), var(--secondary-neon));
+            border: none;
+            border-radius: 12px;
+            padding: 15px;
+            color: #050a15;
+            font-family: 'Orbitron', sans-serif;
+            font-weight: 700;
+            cursor: pointer;
+            transition: 0.3s;
+            margin-top: 10px;
+        }
+
+        .login-btn:hover { transform: translateY(-2px); filter: brightness(1.1); }
+
+        .auth-links { margin-top: 20px; text-align: center; font-size: 14px; color: #8a99af; }
+        .auth-links a { color: var(--primary-neon); text-decoration: none; font-weight: 600; }
+
+        .flash {
+            background: rgba(255, 77, 77, 0.1);
+            border: 1px solid rgba(255, 77, 77, 0.3);
+            color: #ff4d4d;
+            padding: 10px;
+            border-radius: 8px;
+            margin-bottom: 15px;
+            font-size: 13px;
+        }
+
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+    </style>
+</head>
+<body>
+    <div class="login-wrapper">
+        <div class="login-card">
+            <div class="brand">
+                <h1>Operative Registration</h1>
+            </div>
+
+            {% with messages = get_flashed_messages() %}
+            {% if messages %}
+                {% for msg in messages %}
+                    <div class="flash">{{ msg }}</div>
+                {% endfor %}
+            {% endif %}
+            {% endwith %}
+
+            <form method="POST" id="registerForm">
+                <div class="form-grid">
+                    <div class="form-group full">
+                        <label>Username</label>
+                        <input type="text" name="username" placeholder="Create identity" required>
+                    </div>
+                    
+                    <div class="form-group full">
+                        <label>Access Key (Password)</label>
+                        <input type="password" name="password" placeholder="••••••••" required>
+                    </div>
+                    
+                    <div class="form-group full">
+                        <label>Email (Required for OTP Access)</label>
+                        <input type="email" name="email" placeholder="sec@hq.com" required>
+                    </div>
+                </div>
+                
+                <button type="submit" class="login-btn" id="registerBtn">Authorize Account</button>
+            </form>
+
+            <div class="auth-links">
+                Already registered? <a href="/">Identify Here</a>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const btn = document.getElementById('registerBtn');
+        const form = document.getElementById('registerForm');
+        form.addEventListener('submit', () => {
+            btn.disabled = true;
+            btn.textContent = 'Authorizing...';
+        });
+    </script>
+</body>
+</html>
