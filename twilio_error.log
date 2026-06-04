@@ -1,0 +1,28 @@
+[2026-03-25 20:41:51.375690] Twilio Error: 
+[31m[49mHTTP Error[0m [37m[49mYour request was:[0m
+
+[36m[49mPOST /Accounts/ACeb3447997d60dde0f3b59acbfa356020/Messages.json[0m
+
+[37m[49mTwilio returned the following information:[0m
+
+[34m[49mUnable to create record: Invalid From Number (caller ID): 8310702310[0m
+
+[37m[49mMore information may be available here:[0m
+
+[34m[49mhttps://www.twilio.com/docs/errors/21212[0m
+
+
+[2026-03-25 20:47:35.895715] Twilio Error: 
+[31m[49mHTTP Error[0m [37m[49mYour request was:[0m
+
+[36m[49mPOST /Accounts/ACeb3447997d60dde0f3b59acbfa356020/Messages.json[0m
+
+[37m[49mTwilio returned the following information:[0m
+
+[34m[49mUnable to create record: 'To' and 'From' number cannot be the same: +91831070XXXX[0m
+
+[37m[49mMore information may be available here:[0m
+
+[34m[49mhttps://www.twilio.com/docs/errors/21266[0m
+
+
